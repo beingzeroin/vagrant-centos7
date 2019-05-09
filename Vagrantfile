@@ -6,7 +6,7 @@ NAME_PREFIX = 'server'
 
 # Configure VM servers
 servers = []
-(0..SERVER_COUNT-1).each do |i|
+(1..SERVER_COUNT).each do |i|
   name = NAME_PREFIX + i.to_s
   ip = NETWORK + (FIRST_IP + i).to_s
   servers << {'name' => name, 'ip' => ip}
@@ -20,6 +20,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define server['name'] do |config2|
       config2.vm.hostname = server['name']
       config2.vm.network :private_network, ip: server['ip']
+      config2.vm.synced_folder ".", "/vagrant", type: "rsync"
 
       #if (server['name'] == 'node0')
       #  config2.vm.provision :shell, :inline => opsc_script
